@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var games : [Game] = []
     
     private var settingsDefaults : [String : Any?] = ["music" : true, "sounds" : true, "rumble" : true, "language" : "english", "posColor" : UIColor.orange, "negColor" : UIColor.red, "userName" : nil, "userImage" : #imageLiteral(resourceName: "profileUnknown"), "userBanner" : #imageLiteral(resourceName: "defaultBanner")]
-    private var singlePlayerDefaults = [String : [String : Any]]() //(image : UIImage, score : Double)]()
+    private var singlePlayerDefaults = [String : [String : Any]]()
     private var multiPlayerDefaults = [String : [String : Any]]()
 
     
@@ -44,13 +44,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             settings = UserDefaults.standard.getData(forKey: "swiperiaSettings")
             singlePlayerScores = UserDefaults.standard.getData(forKey: "swiperiaSinglePlayer")
             multiPlayerScores = UserDefaults.standard.getData(forKey: "swiperiaMultiPlayer")
-            
-            print(settings)
-            print("----------------------")
-            print(singlePlayerScores)
-            print("----------------------")
-            print(multiPlayerScores)
-            
         } else {
             print("Key nicht vorhanden, Standard UserDefaults werden angelegt.")
             
@@ -93,11 +86,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-
         print("Background")
         UserDefaults.standard.setData(dictionaryData: settings, forKey: "swiperiaSettings")
-        UserDefaults.standard.setData(dictionaryData: singlePlayerDefaults, forKey: "swiperiaSinglePlayer")
-        UserDefaults.standard.setData(dictionaryData: multiPlayerDefaults, forKey: "swiperiaMultiPlayer")
+        UserDefaults.standard.setData(dictionaryData: singlePlayerScores, forKey: "swiperiaSinglePlayer")
+        UserDefaults.standard.setData(dictionaryData: multiPlayerScores, forKey: "swiperiaMultiPlayer")
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
