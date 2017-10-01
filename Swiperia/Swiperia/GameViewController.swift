@@ -12,7 +12,7 @@ import SpriteKit
 
 class GameViewController: UIViewController {
     @IBOutlet weak var gameView: SCNView!
-    
+
     var subView : SCNView!
     var gameScene : GameScene!
     var geometryNode: SphereNode!
@@ -24,9 +24,9 @@ class GameViewController: UIViewController {
     var arrowTimer : TimeManager!
     var directionManager : DirectionManager = StandardDirectionManager()
     var gameScore : GameScoreManager!
-    
-    var positiveColor : UIColor = .orange
-    var negativeColor : UIColor = .red
+
+    var positiveColor : UIColor = (UIApplication.shared.delegate as! AppDelegate).settings["posColor"] as! UIColor
+    var negativeColor : UIColor = (UIApplication.shared.delegate as! AppDelegate).settings["negColor"] as! UIColor
     var activeColor = UIColor.orange
     var stillAlive = true
     var isPaused = false

@@ -46,12 +46,6 @@ class GameSelectionController: UIViewController, iCarouselDataSource, iCarouselD
         
         var itemView: CarousselGameView
         
-        // Reuse view if available, otherwise create a new view
-        //if let view = view as? CarousselGameView {
-            //let size = view.frame
-            //itemView = view
-            /*itemView.image = resizeImage(image: UIImage(named: items[index].imageName)!, newWidth: size.width, newHeight: size.height)*/
-        //} else {
         let size = self.view.frame
         var newWidth = size.width
         var newHeight = size.height - UIApplication.shared.statusBarFrame.height
@@ -64,17 +58,9 @@ class GameSelectionController: UIViewController, iCarouselDataSource, iCarouselD
         
         newHeight *= 0.95
         newWidth *= 0.75
-        
-            //itemView = UIImageView(frame: CGRect(x: 0, y: 0, width: newWidth, height: newHeight))
-            //itemView.image = resizeImage(image: UIImage(named: items[index].imageName)!, newWidth: newWidth, newHeight: newHeight)
+
         itemView = CarousselGameView(parentController: self, size: CGRect.init(x: 0, y: 0, width: newWidth, height: newHeight), item: items[index])
             itemView.contentMode = .center
-            
-            // Create Info-Button
-            
-            // Create Play-Button
-            
-        //}
         
         return itemView
     }

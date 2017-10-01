@@ -24,10 +24,11 @@ class MPCManager: NSObject {
     var messageManager = MessageManager()
     var maxMember = 1
     
-    //for session
-    let myPeerID = MCPeerID(displayName: UIDevice.current.name)
+    var userName : String = "Unknown User"
     
-    var session : MCSession!
+    var session : MCSession
+    
+    var myPeerID : MCPeerID
     
     weak var sessionDelegate : MultipeerSessionManagerDelegate?
     
@@ -44,6 +45,9 @@ class MPCManager: NSObject {
     weak var browseDelegate : MultipeerBrowseManagerDelegate?
     
     override init() {
+        if let name = (UIApplication.shared.delegate as! AppDelegate).settings["userName"] as? String {userName = name}
+        //for session
+        myPeerID = MCPeerID(displayName: userName)
         session = MCSession(peer: myPeerID, securityIdentity: nil, encryptionPreference: .required)
         super.init()
         session.delegate = self

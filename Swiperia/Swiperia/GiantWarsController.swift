@@ -188,7 +188,37 @@ class GiantWarsController: GameViewController {
     
     override func leaveGame() {
         super.leaveGame()
-        //TODO: save all results
+        if wonGames > 0 || lostGames > 0 {
+            var multiplayerScores = (UIApplication.shared.delegate as! AppDelegate).multiPlayerScores[gameName] as! [String:Any]
+            
+            var gameData = multiplayerScores["opponents"] as! [String:Any]
+            
+            if gameData[opponent.peer.displayName] != nil {
+                var opponentData = gameData[opponent.peer.displayName] as! (myPoints: Int, opponentPoints: Int, image: UIImage)
+                opponentData.myPoints += wonGames
+                opponentData.opponentPoints += lostGames
+                opponentData.image = opponent.image
+                gameData[opponent.peer.displayName] = opponentData
+            } else {
+                if gameData.count >= 10 {
+                    var highestOpponent = ""
+                    var highestPoints = 0
+                    for opponentData in gameData {
+                        let opD = opponentData.value as! (myPoints: Int, opponentPoints: Int, image: UIImage)
+                        if (opD.myPoints + opD.opponentPoints) > highestPoints {
+                            highestOpponent = opponentData.key
+                            highestPoints = opD.myPoints + opD.opponentPoints
+                        }
+                    }
+                    gameData.removeValue(forKey: highestOpponent)
+                }
+                gameData[opponent.peer.displayName] = (myPoints: wonGames, opponentPoints: lostGames, image: opponent.image)
+            }
+            
+            multiplayerScores[gameName] = gameData
+            (UIApplication.shared.delegate as! AppDelegate).multiPlayerScores[gameName] = multiplayerScores
+        }
+        
         if toLobby == nil {
             if isHost { toLobby = true }
             else { toLobby = false }

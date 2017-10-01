@@ -71,9 +71,6 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         
         checkUserDefaults(settings: appDelegate.settings)
         
-//        initiateAvatarImage()
-//        initiateBanner()
-        
         profileTableView.delegate = self
         profileTableView.dataSource = self
         
@@ -85,8 +82,8 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         
         userNameTextField.textColor = .black
         setTextFieldBorder()
-        
-        displayedRows = data
+        prepareCollapseData()
+        displayedRows = collapseData
     }
     
     override func didReceiveMemoryWarning() {
@@ -96,6 +93,8 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
     
     override func viewDidAppear(_ animated: Bool) {
         //checkForProfileUserDefaults()
+        prepareCollapseData()
+        profileTableView.reloadData()
     }
     
     
@@ -123,16 +122,15 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
     
     // Initiate avatar image with a default image
     func initiateAvatarImage(avatar : UIImage) {
-        let newImage = ProfileImageMaker.imageMaker.createProfileImage(from: avatar, favoriteColor: appDelegate.settings["posColor"] as! UIColor, radius: avatarImageView.frame.width/2)
-        avatarImageView.image = newImage
-        appDelegate.settings["userImage"] = newImage
+        if avatar == #imageLiteral(resourceName: "profileUnknown") {
+            avatarImageView.image = ProfileImageMaker.imageMaker.createProfileImage(from: avatar, favoriteColor: appDelegate.settings["posColor"] as! UIColor, radius: avatarImageView.frame.width/2)
+        } else { avatarImageView.image = avatar }
         addTabGestureForImageView(view: avatarImageView)
     }
     
     // Initiating banner with a default image
     func initiateBanner(banner : UIImage) {
         bannerImageView.image = banner
-        appDelegate.settings["userBanner"] = banner
         addTabGestureForImageView(view: bannerImageView)
     }
     
@@ -198,19 +196,6 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         }
     }
     
-//    func checkForProfileUserDefaults() {
-//        if let userName = store.object(forKey: UserDefaults.UserDefaultKeys.userName.rawValue) {
-//            userNameTextField.text = userName as? String
-//        }
-//        if let userProfileImage = store.object(forKey: UserDefaults.UserDefaultKeys.userProfileImage.rawValue) {
-//            avatarImageView.image = store.getImage(forKey: userProfileImage as! String)
-//        }
-//        if let profileBannerImage = store.object(forKey: UserDefaults.UserDefaultKeys.userProfileBanner.rawValue) {
-//            bannerImageView.image = store.getImage(forKey: profileBannerImage as! String)
-//        }
-//    }
-    
-    
     // MARK: - Action-Functions --------------------------------------------------
     @IBAction func singlePlayerButtonTapped(_ sender: UIButton) {
         let labelText = sender.titleLabel?.text
@@ -229,7 +214,6 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
     @IBAction func userNameTextfieldPressed(_ sender: UITextField) {
         userNameTextField.text = sender.text
         appDelegate.settings["userName"] = sender.text
-        //store.set(sender.text, forKey: UserDefaults.UserDefaultKeys.userName.rawValue)
         sender.resignFirstResponder()
     }
     
@@ -305,14 +289,14 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
         if tapedImageView == bannerImageView {
             tapedImageView?.image = image
-            // Hier Banner im Store speichern
-            //store.setImage(image: image, forKey: UserDefaults.UserDefaultKeys.userProfileBanner.rawValue)
+            
+            appDelegate.settings["userBanner"] = image
         } else if tapedImageView == avatarImageView {
-            tapedImageView?.image = ProfileImageMaker.imageMaker.createProfileImage(from: image, favoriteColor: .yellow, radius: avatarImageView.frame.width/2)
-            // Hier Avatar im Store speichern
-            //store.setImage(image: image, forKey: UserDefaults.UserDefaultKeys.userProfileImage.rawValue)
+            let newImage = ProfileImageMaker.imageMaker.createProfileImage(from: image, favoriteColor: appDelegate.settings["posColor"] as! UIColor, radius: avatarImageView.frame.width/2)
+            tapedImageView?.image = newImage
+            
+            appDelegate.settings["userImage"] = newImage
         }
-        //tapedImageView?.image = image
         picker.dismiss(animated: true, completion: nil)
     }
     
@@ -336,6 +320,22 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         CollapseableViewModel(label: "Deals")
     ]
     
+    var collapseData : [CollapseableViewModel] = []
+    
+    func prepareCollapseData() {
+        let multiplayerGames = (UIApplication.shared.delegate as! AppDelegate).multiPlayerScores
+        for game in multiplayerGames {
+            var children : [CollapseableViewModel] = []
+            for (key, value) in ((game.value as! [String:Any])["opponents"] as! [String:Any]) {
+                let val = value as! (myPoints: Int, opponentPoints: Int, image: UIImage)
+                children.append(CollapseableViewModel(label: key, image: val.image, children: [], isCollapsed: false, opponentPoints: val.opponentPoints, myPoints: val.myPoints))
+            }
+            
+            let model = CollapseableViewModel(label: game.key, image: UIImage.init(named: (game.value as! [String:Any])["image"] as! String), children: children)
+            collapseData.append(model)
+        }
+    }
+    
     var displayedRows : [CollapseableViewModel] = []
     
     
@@ -349,40 +349,41 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         if wantedTableView == "Singleplayer" {
             return appDelegate.singlePlayerScores.count
         } else {
-            return appDelegate.multiPlayerScores.count
+            return displayedRows.count
         }
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+    {
+        return 75
+    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         tableView.separatorStyle = .none
+        let fontColor = UIColor.white
         
         if wantedTableView == "Singleplayer" {
             let cell = profileTableView.dequeueReusableCell(withIdentifier: "SinglePlayerCell", for: indexPath) as! SinglePlayerCellController
+            let attributes : [String: Any] = [
+                NSFontAttributeName : UIFont(name: "HelveticaNeue-bold", size: 20),
+                NSForegroundColorAttributeName : fontColor,
+                NSUnderlineStyleAttributeName : NSUnderlineStyle.styleSingle.rawValue]
+            let attributeName = NSMutableAttributedString(string: Array(appDelegate.singlePlayerScores.keys)[indexPath.row], attributes: attributes)
+            cell.gameNameLabel.attributedText = attributeName
+            cell.gameScoreLabel.text = String(format: "%.0f",(appDelegate.singlePlayerScores[Array(appDelegate.singlePlayerScores.keys)[indexPath.row]] as! [String : Any])["score"] as! Double)
+            cell.gameScoreLabel.font = UIFont(name: "HelveticaNeue", size: 20)
+            cell.gameScoreLabel.textColor = fontColor
+            cell.gameImageView.image = UIImage.init(named: (appDelegate.singlePlayerScores[Array(appDelegate.singlePlayerScores.keys)[indexPath.row]] as! [String : Any])["image"] as! String)
             
-            cell.gameNameLabel.text = Array(appDelegate.singlePlayerScores.keys)[indexPath.row]
-            cell.gameScoreLabel.text = (appDelegate.singlePlayerScores[Array(appDelegate.singlePlayerScores.keys)[indexPath.row]] as! [String : Any])["score"] as! String
-            cell.gameImageView.image = (appDelegate.singlePlayerScores[Array(appDelegate.singlePlayerScores.keys)[indexPath.row]] as! [String : Any])["image"] as! UIImage
+            if indexPath.row == appDelegate.singlePlayerScores.count - 1 {cell.configure(withSeperator: false)}
+            else {cell.configure(withSeperator: true)}
             return cell
         } else {
-            //let cell = (tableView.dequeueReusableCell(withIdentifier: "MultiPlayerCell", for: indexPath) as? CollapsableTableViewCell) ?? CollapsableTableViewCell(style: .default, reuseIdentifier: "MultiPlayerCell")
-//            let cell = (UITableViewCell(style: .default, reuseIdentifier: "MultiPlayerCell") as? CollapsableTableViewCell) ?? CollapsableTableViewCell(style: .default, reuseIdentifier: "MultiPlayerCell") 
-//            let viewModel = displayedRows[indexPath.row]
-//            cell.textLabel?.text = viewModel.label
-//            return cell
-            
-            let cell = (UITableViewCell(style: .default, reuseIdentifier: "MultiPlayerCell") as? CollapsableTableViewCell) ?? CollapsableTableViewCell(style: .default, reuseIdentifier: "MultiPlayerCell")
-            //cell.layer.backgroundColor = UIColor.blue as? CGColor
+            let cell = profileTableView.dequeueReusableCell(withIdentifier: "MultiPlayerCell", for: indexPath) as! MultiPlayerCellController
             cell.configure(viewModel: displayedRows[indexPath.row])
             return cell
         }
-        
-//        let cell = (tableView.dequeueReusableCell(withIdentifier: "MultiPlayerCell", for: indexPath) as? CollapsableTableViewCell) ?? CollapsableTableViewCell(style: .default, reuseIdentifier: "MultiPlayerCell")
-//        let viewModel = displayedRows[indexPath.row]
-//        cell.textLabel?.text = viewModel.label
-//        
-//        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

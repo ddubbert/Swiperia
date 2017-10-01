@@ -14,12 +14,13 @@ import MultipeerConnectivity
 
 class BeatTheMachineController : GameViewController {
     var profileImage : UIImage!
+    let gameName = "Beat The Machine"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
         
-        profileImage = ProfileImageMaker.imageMaker.createProfileImage(from: #imageLiteral(resourceName: "doener"), favoriteColor: .cyan, radius: view.frame.height / 15)
+        profileImage = (UIApplication.shared.delegate as! AppDelegate).settings["userImage"] as! UIImage
         activeColor = positiveColor
         
         setupManager()
@@ -115,7 +116,15 @@ class BeatTheMachineController : GameViewController {
     
     override func leaveGame() {
         super.leaveGame()
-        //TODO: save all results / do segue
+        var singleplayerScores = (UIApplication.shared.delegate as! AppDelegate).singlePlayerScores[gameName] as! [String:Any]
+        let oldScore = singleplayerScores["score"] as! Double
+        let currentScore = gameScore.score
+        
+        if oldScore < currentScore {
+            singleplayerScores["score"] = currentScore
+            (UIApplication.shared.delegate as! AppDelegate).singlePlayerScores[gameName] = singleplayerScores
+        }
+        
         dismiss(animated: true, completion: nil)
     }
     

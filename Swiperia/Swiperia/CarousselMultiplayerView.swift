@@ -24,9 +24,11 @@ class CarousselGameView: UIView {
         parent = parentController
         game = item
         super.init(frame: size)
-        let newWidth = size.width * 0.95
-        let newHeight = size.height * 0.95
-        let groupView = UIView(frame: CGRect(x: (size.width - newWidth) / 2, y: size.height - newHeight, width: newWidth , height: newHeight))
+        let newWidth = size.width
+        let newHeight = size.height
+        let groupView = UIView(frame: CGRect(x: 0, y: 0, width: newWidth , height: newHeight))
+        groupView.layer.borderColor = UIColor.white.cgColor
+        groupView.layer.borderWidth = 1
         addSubview(groupView)
         
         let header = UIView(frame: CGRect(x: 0, y: 0, width: newWidth, height: newHeight / 6))

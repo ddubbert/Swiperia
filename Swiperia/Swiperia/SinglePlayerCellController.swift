@@ -16,6 +16,20 @@ class SinglePlayerCellController: UITableViewCell {
     @IBOutlet weak var gameNameLabel: UILabel!
     // gameScoreLabel in Cell
     @IBOutlet weak var gameScoreLabel: UILabel!
+
+    let separator = UIView(frame: CGRect.zero)
+    
+    func configure(withSeperator: Bool) {
+        if withSeperator {
+            separator.backgroundColor = UIColor.white
+            contentView.addSubview(separator)
+        }
+    }
+    
+    override func layoutSubviews() {
+        let separatorHeight = 1 / UIScreen.main.scale
+        separator.frame = CGRect(x: Double(separatorInset.left), y: Double(contentView.bounds.height - separatorHeight), width: Double(contentView.bounds.width - separatorInset.left - separatorInset.right), height: Double(separatorHeight))
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()

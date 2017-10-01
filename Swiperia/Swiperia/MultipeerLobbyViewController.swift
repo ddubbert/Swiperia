@@ -35,13 +35,8 @@ class MultipeerLobbyViewController: UIViewController {
     var buttonColor : UIColor?
     var myPicture : UIImage!
     
-    let images = [#imageLiteral(resourceName: "doener"), #imageLiteral(resourceName: "eddy")]
-    let colors : [UIColor] = [.cyan, .orange, .green, .yellow]
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        let rndImage = images[Int(arc4random_uniform(UInt32(images.count)))]
-        let rndColor = colors[Int(arc4random_uniform(UInt32(colors.count)))]
 
         buttonColor = startButton.backgroundColor
         startButton.backgroundColor = .clear
@@ -49,7 +44,7 @@ class MultipeerLobbyViewController: UIViewController {
             mpcManager = MPCManager()
             leader = mpcManager.myPeerID
             //mpcManager.maxMember = maxMember
-            myPicture = ProfileImageMaker.imageMaker.createProfileImage(from: rndImage, favoriteColor: rndColor, radius: view.frame.height / 20)
+            myPicture = (UIApplication.shared.delegate as! AppDelegate).settings["userImage"] as! UIImage
             startButton.setTitleColor(.darkGray, for: .disabled)
             startButton.setTitle("Waiting...", for: .disabled)
             startButton.setBackgroundImage(#imageLiteral(resourceName: "highButtonBlack"), for: .normal)

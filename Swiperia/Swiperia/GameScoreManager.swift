@@ -17,7 +17,7 @@ protocol GameScoreManagerDelegate: class {
 
 class GameScoreManager {    
     ///
-    private var score : Double = 0 {
+    var score : Double = 0 {
         didSet {
             delegate?.scoreDidChange(to: score)
         }

@@ -20,12 +20,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var games : [Game] = []
     
     private var settingsDefaults : [String : Any?] = ["music" : true, "sounds" : true, "rumble" : true, "language" : "english", "posColor" : UIColor.orange, "negColor" : UIColor.red, "userName" : nil, "userImage" : #imageLiteral(resourceName: "profileUnknown"), "userBanner" : #imageLiteral(resourceName: "defaultBanner")]
-    private var singlePlayerDefaults = [String : [String : Any]]()
-    private var multiPlayerDefaults = [String : [String : Any]]()
+    private var singlePlayerDefaults = [String : Any]()
+    private var multiPlayerDefaults = [String : Any]()
 
     
     var settings = [String : Any]()
-    var singlePlayerScores = [String : Any]()
+    var singlePlayerScores = [String: Any]()
     var multiPlayerScores = [String : Any]()
     
     
@@ -40,16 +40,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //print(UserDefaults.standard.getData(forKey: "swiperiaSettings"))
         if (UserDefaults.standard.object(forKey: "swiperiaSettings") != nil) {
-            print("Key vorhanden.")
+            print("Settings vorhanden.")
             settings = UserDefaults.standard.getData(forKey: "swiperiaSettings")
-            singlePlayerScores = UserDefaults.standard.getData(forKey: "swiperiaSinglePlayer")
-            multiPlayerScores = UserDefaults.standard.getData(forKey: "swiperiaMultiPlayer")
         } else {
-            print("Key nicht vorhanden, Standard UserDefaults werden angelegt.")
-            
+            print("Settings nicht vorhanden, Standard UserDefaults werden angelegt.")
+
             // SettingsDefaults in die UserDefaults überführen
             settings = settingsDefaults
+        }
         
+        if (UserDefaults.standard.object(forKey: "swiperiaSinglePlayer") != nil) {
+            print("Singleplayer vorhanden.")
+            singlePlayerScores = UserDefaults.standard.getData(forKey: "swiperiaSinglePlayer")
+        } else {
+            print("Singleplayer nicht vorhanden, Standard UserDefaults werden angelegt.")
+
             // SinglePlayerDefaults in die UserDefaults überführen
             games = gameModes.getSpecificGameModes(for: .single)
             for game in games {
@@ -58,9 +63,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 spDefaults["score"] = 0
                 singlePlayerDefaults[game.name] = spDefaults
             }
-           
-            singlePlayerScores = singlePlayerDefaults
             
+            singlePlayerScores = singlePlayerDefaults
+        }
+        
+        if (UserDefaults.standard.object(forKey: "swiperiaMultiPlayer") != nil) {
+            print("Multiplayer vorhanden.")
+            multiPlayerScores = UserDefaults.standard.getData(forKey: "swiperiaMultiPlayer")
+        } else {
+            print("Multiplayer nicht vorhanden, Standard UserDefaults werden angelegt.")
             // MultiPlayerDefaults in die UserDefaults überführen
             games = gameModes.getSpecificGameModes(for: .multi)
             for game in games {
@@ -69,10 +80,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 mpDefaults["opponents"] = [String : Any]()
                 multiPlayerDefaults[game.name] = mpDefaults
             }
-            
             multiPlayerScores = multiPlayerDefaults
         }
-        
         
         return true
     }
