@@ -189,35 +189,94 @@ class GiantWarsController: GameViewController {
     override func leaveGame() {
         super.leaveGame()
         if wonGames > 0 || lostGames > 0 {
-            var multiplayerScores = (UIApplication.shared.delegate as! AppDelegate).multiPlayerScores[gameName] as! [String:Any]
+            var multiPlayerData = (UIApplication.shared.delegate as! AppDelegate).multiPlayerData[gameName] as! [String:Any]
             
-            var gameData = multiplayerScores["opponents"] as! [String:Any]
+            var enemyNames = multiPlayerData["opponents"] as! [String]
+            var enemyData = (UIApplication.shared.delegate as! AppDelegate).enemyData
             
-            if gameData[opponent.peer.displayName] != nil {
-                var opponentData = gameData[opponent.peer.displayName] as! (myPoints: Int, opponentPoints: Int, image: UIImage)
-                opponentData.myPoints += wonGames
-                opponentData.opponentPoints += lostGames
-                opponentData.image = opponent.image
-                gameData[opponent.peer.displayName] = opponentData
+            var nameIsPresent = false
+            
+            enemyNames.forEach{(element) in
+                if element == opponent.peer.displayName + " " + gameName {
+                    nameIsPresent = true
+                }
+            }
+            
+            if nameIsPresent {
+                var enemy = enemyData[opponent.peer.displayName + " " + gameName] as! [String:Any]
+                enemy["myPoints"] = enemy["myPoints"] as! Int + wonGames
+                enemy["opponentPoints"] = enemy["opponentPoints"] as! Int + lostGames
+                enemy["image"] = opponent.image
+                enemyData[opponent.peer.displayName + " " + gameName] = enemy
+            } else {
+                if enemyNames.count >= 10 {
+                    var lowestEnemy = 0
+                    var lowestValue = 0
+                    
+                    enemyNames.enumerated().forEach{(i, name) in
+                        let enemy = enemyData[name] as! [String:Any]
+                        let won = enemy["myPoints"] as! Int
+                        let lost = enemy["opponentPoints"] as! Int
+                        if(won + lost > lowestValue) {
+                            lowestValue = won + lost
+                            lowestEnemy = i
+                        }
+                    }
+                    enemyData.removeValue(forKey: enemyNames[lowestEnemy])
+                    enemyNames.remove(at: lowestEnemy)
+                }
+                
+                enemyNames.append(opponent.peer.displayName + " " + gameName)
+                
+                var enemy = [String:Any]()
+                enemy["name"] = opponent.peer.displayName
+                enemy["myPoints"] = wonGames
+                enemy["opponentPoints"] = lostGames
+                enemy["image"] = opponent.image
+                enemyData[opponent.peer.displayName + " " + gameName] = enemy
+            }
+            
+            multiPlayerData["opponents"] = enemyNames
+            (UIApplication.shared.delegate as! AppDelegate).multiPlayerData[gameName] = multiPlayerData
+            (UIApplication.shared.delegate as! AppDelegate).enemyData = enemyData
+            
+            /*if enemyNames[opponent.peer.displayName + " " + gameName] != nil {
+                var opponentData = gameData[opponent.peer.displayName] as! [String:Any]
+                opponentData["myPoints"] = (opponentData["myPoints"] as! Int) + wonGames
+                opponentData["opponentPoints"] = (opponentData["opponentPoints"] as! Int) + lostGames
+                opponentData["image"] = opponent.image
+                gameData[opponent.peer.displayName] = opponentData.values
+                
             } else {
                 if gameData.count >= 10 {
                     var highestOpponent = ""
                     var highestPoints = 0
                     for opponentData in gameData {
-                        let opD = opponentData.value as! (myPoints: Int, opponentPoints: Int, image: UIImage)
-                        if (opD.myPoints + opD.opponentPoints) > highestPoints {
+                        let opD = opponentData.value as! [String:Any]
+                        let mP = opD["myPoints"] as! Int
+                        let oP = opD["opponentPoints"] as! Int
+                        if (mP + oP) > highestPoints {
                             highestOpponent = opponentData.key
-                            highestPoints = opD.myPoints + opD.opponentPoints
+                            highestPoints = mP + oP
                         }
                     }
                     gameData.removeValue(forKey: highestOpponent)
                 }
-                gameData[opponent.peer.displayName] = (myPoints: wonGames, opponentPoints: lostGames, image: opponent.image)
+                var newOpponent = [String:Any]()
+                newOpponent["myPoints"] = wonGames
+                newOpponent["opponentPoints"] = lostGames
+                newOpponent["image"] = opponent.image
+                gameData[opponent.peer.displayName] = newOpponent.values
+                    //(myPoints: wonGames, opponentPoints: lostGames, image: opponent.image)
             }
             
-            multiplayerScores[gameName] = gameData
-            (UIApplication.shared.delegate as! AppDelegate).multiPlayerScores[gameName] = multiplayerScores
+            multiplayerScores["opponents"] = gameData.values
+            
+            (UIApplication.shared.delegate as! AppDelegate).multiPlayerScores[gameName] = multiplayerScores.values
+            print(multiplayerScores)*/
         }
+        
+        print((UIApplication.shared.delegate as! AppDelegate).multiPlayerData[gameName])
         
         if toLobby == nil {
             if isHost { toLobby = true }

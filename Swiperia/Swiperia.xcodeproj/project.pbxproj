@@ -41,6 +41,9 @@
 		FB9A9A531F4CD97F009EBF16 /* ProgressLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9A9A521F4CD97F009EBF16 /* ProgressLayer.swift */; };
 		FB9A9A551F4DC226009EBF16 /* SnowLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9A9A541F4DC226009EBF16 /* SnowLayer.swift */; };
 		FBBAFC871F66AADA009A40A3 /* GameSelectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBBAFC861F66AADA009A40A3 /* GameSelectionController.swift */; };
+		FBDEA5B51F82857500690601 /* MultiplayerGameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBDEA5B41F82857500690601 /* MultiplayerGameData.swift */; };
+		FBDEA5B71F82F47100690601 /* ItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBDEA5B61F82F47100690601 /* ItemViewController.swift */; };
+		FBDEA5B91F82F77D00690601 /* SingleItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBDEA5B81F82F77D00690601 /* SingleItemCell.swift */; };
 		FBE1AB3F1F7E85EB007CC61C /* CarousselMultiplayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE1AB3E1F7E85EB007CC61C /* CarousselMultiplayerView.swift */; };
 		FBEE1D371F4F0276002936B4 /* Bass17w20.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FBEE1D361F4F0276002936B4 /* Bass17w20.mp3 */; };
 		FBEE1D391F4F0FDB002936B4 /* MusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBEE1D381F4F0FDB002936B4 /* MusicPlayer.swift */; };
@@ -101,6 +104,9 @@
 		FB9A9A521F4CD97F009EBF16 /* ProgressLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressLayer.swift; sourceTree = "<group>"; };
 		FB9A9A541F4DC226009EBF16 /* SnowLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnowLayer.swift; sourceTree = "<group>"; };
 		FBBAFC861F66AADA009A40A3 /* GameSelectionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSelectionController.swift; sourceTree = "<group>"; };
+		FBDEA5B41F82857500690601 /* MultiplayerGameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplayerGameData.swift; sourceTree = "<group>"; };
+		FBDEA5B61F82F47100690601 /* ItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemViewController.swift; sourceTree = "<group>"; };
+		FBDEA5B81F82F77D00690601 /* SingleItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleItemCell.swift; sourceTree = "<group>"; };
 		FBE1AB3E1F7E85EB007CC61C /* CarousselMultiplayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarousselMultiplayerView.swift; sourceTree = "<group>"; };
 		FBEE1D361F4F0276002936B4 /* Bass17w20.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Bass17w20.mp3; sourceTree = "<group>"; };
 		FBEE1D381F4F0FDB002936B4 /* MusicPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicPlayer.swift; sourceTree = "<group>"; };
@@ -282,6 +288,7 @@
 				FB16DCC71F44B49300FA205D /* SwiftClassExtensions.swift */,
 				FBEE1D381F4F0FDB002936B4 /* MusicPlayer.swift */,
 				FBF7F2241F66B8EE000C3CB4 /* GameManager.swift */,
+				FBDEA5B41F82857500690601 /* MultiplayerGameData.swift */,
 			);
 			name = Helper;
 			sourceTree = "<group>";
@@ -324,6 +331,7 @@
 				FBF7F2261F66BE90000C3CB4 /* CustomTabBarController.swift */,
 				FBF7F2281F66BF1F000C3CB4 /* ProfileController.swift */,
 				FBF7F22F1F66C036000C3CB4 /* SettingsController.swift */,
+				FBDEA5B61F82F47100690601 /* ItemViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -389,6 +397,7 @@
 			children = (
 				FBF7F22B1F66BF59000C3CB4 /* SinglePlayerCellController.swift */,
 				FBF7F22D1F66BF8E000C3CB4 /* MultiPlayerCellController.swift */,
+				FBDEA5B81F82F77D00690601 /* SingleItemCell.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -541,6 +550,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBDEA5B71F82F47100690601 /* ItemViewController.swift in Sources */,
 				6DB9DD4D1F72660F00FA21E4 /* UserDefaultsStoreData.swift in Sources */,
 				FBF7F2291F66BF1F000C3CB4 /* ProfileController.swift in Sources */,
 				FB9A9A531F4CD97F009EBF16 /* ProgressLayer.swift in Sources */,
@@ -555,10 +565,12 @@
 				FB244E271F62C0460048FE62 /* OpponentHealthBar.swift in Sources */,
 				FBBAFC871F66AADA009A40A3 /* GameSelectionController.swift in Sources */,
 				FB16DCC41F44AA9A00FA205D /* ConstantsAndGlobals.swift in Sources */,
+				FBDEA5B51F82857500690601 /* MultiplayerGameData.swift in Sources */,
 				FB77AC481F34DB7F004F21FB /* SphereNode.swift in Sources */,
 				FBE1AB3F1F7E85EB007CC61C /* CarousselMultiplayerView.swift in Sources */,
 				FBF7F2271F66BE90000C3CB4 /* CustomTabBarController.swift in Sources */,
 				FBF7F22E1F66BF8E000C3CB4 /* MultiPlayerCellController.swift in Sources */,
+				FBDEA5B91F82F77D00690601 /* SingleItemCell.swift in Sources */,
 				FBF22FCD1F3B2E1F00A85082 /* GameScoreManager.swift in Sources */,
 				FBF7F2221F66B504000C3CB4 /* iCarousel.m in Sources */,
 				FBEE1D5A1F55C2BE002936B4 /* MultipeerAdvertiserCell.swift in Sources */,

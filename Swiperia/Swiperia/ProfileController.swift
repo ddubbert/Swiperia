@@ -15,6 +15,8 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
     //MARK: - UserDefaults AppDelegate
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
+    @IBOutlet weak var headerLabel: UILabel!
+    
     
     //MARK: - Properties --------------------------------------------------
     // Properties for profile Images
@@ -82,8 +84,12 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         
         userNameTextField.textColor = .black
         setTextFieldBorder()
-        prepareCollapseData()
-        displayedRows = collapseData
+        
+        
+        headerLabel.text = "Singleplayer Scores"
+        
+        /*prepareCollapseData()
+        displayedRows = collapseData*/
     }
     
     override func didReceiveMemoryWarning() {
@@ -201,6 +207,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         let labelText = sender.titleLabel?.text
         wantedTableView = labelText!
         profileTableView.reloadData()
+        headerLabel.text = "Singleplayer Scores"
     }
     
     
@@ -208,6 +215,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
         let labelText = sender.titleLabel?.text
         wantedTableView = labelText!
         profileTableView.reloadData()
+        headerLabel.text = "Multiplayer Scores"
     }
     
     
@@ -307,33 +315,28 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
     
     // MARK: - Table View Functions --------------------------------------------------
     
-    let data = [
-        CollapseableViewModel(label: "Account", image: #imageLiteral(resourceName: "blizzard"), children: [
-            CollapseableViewModel(label: "Profile"),
-            CollapseableViewModel(label: "Activate Account"),
-            CollapseableViewModel(label: "Change Password")]),
-        CollapseableViewModel(label: "Group"),
-        CollapseableViewModel(label: "Events", image: nil, children: [
-            CollapseableViewModel(label: "Nearby"),
-            CollapseableViewModel(label: "Global"),
-            ]),
-        CollapseableViewModel(label: "Deals")
-    ]
-    
     var collapseData : [CollapseableViewModel] = []
     
     func prepareCollapseData() {
-        let multiplayerGames = (UIApplication.shared.delegate as! AppDelegate).multiPlayerScores
+        collapseData = []
+        let multiplayerGames = appDelegate.multiPlayerData
+        let enemies = appDelegate.enemyData
+        
         for game in multiplayerGames {
             var children : [CollapseableViewModel] = []
-            for (key, value) in ((game.value as! [String:Any])["opponents"] as! [String:Any]) {
-                let val = value as! (myPoints: Int, opponentPoints: Int, image: UIImage)
-                children.append(CollapseableViewModel(label: key, image: val.image, children: [], isCollapsed: false, opponentPoints: val.opponentPoints, myPoints: val.myPoints))
+            let opponentNames = (game.value as! [String:Any])["opponents"] as! [String]
+            
+            for name in opponentNames {
+                let opponentData = enemies[name] as! [String:Any]
+                
+                children.append(CollapseableViewModel(label: opponentData["name"] as! String, image: opponentData["image"] as? UIImage, children: [], isCollapsed: false, opponentPoints: opponentData["opponentPoints"] as? Int, myPoints: opponentData["myPoints"] as? Int))
             }
             
             let model = CollapseableViewModel(label: game.key, image: UIImage.init(named: (game.value as! [String:Any])["image"] as! String), children: children)
             collapseData.append(model)
         }
+        
+        displayedRows = collapseData
     }
     
     var displayedRows : [CollapseableViewModel] = []
@@ -355,7 +358,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
-        return 75
+        return 60
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

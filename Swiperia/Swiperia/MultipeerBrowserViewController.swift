@@ -28,14 +28,14 @@ class MultipeerBrowserViewController: UIViewController {
         peerTable.delegate = self
         peerTable.dataSource = self
         
-        let headerBorder : CGFloat = 4.0
-        let headerView = UIView.init(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height / 10))
+        let headerBorder : CGFloat = 2.0
+        let headerView = UIView.init(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 40))
         headerView.backgroundColor = peerTable.sectionIndexBackgroundColor
         
         let topLayer = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: headerBorder))
         topLayer.backgroundColor = UIColor.white
         
-        let botLayer = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: headerBorder))
+        let botLayer = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: headerBorder / 2))
         botLayer.backgroundColor = UIColor.white
         
         headerView.addSubview(topLayer)
@@ -110,7 +110,7 @@ extension MultipeerBrowserViewController : MultipeerBrowseManagerDelegate {
 
 extension MultipeerBrowserViewController : UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return view.frame.height / 10
+        return 60
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

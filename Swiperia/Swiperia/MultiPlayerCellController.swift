@@ -21,9 +21,13 @@ class MultiPlayerCellController: UITableViewCell {
     
     func configure(viewModel: CollapseableViewModel) {
         let textFont = UIFont(name: "HelveticaNeue-bold", size: 20)
-        
+        let textFont2 = UIFont(name: "HelveticaNeue-bold", size: 30)
+        contentView.addSubview(separator)
         gameImage.image = viewModel.image
-        if viewModel.needsSeperator {
+        if  viewModel.myPoints == nil && viewModel.opponentPoints == nil {
+            contentView.backgroundColor = UIColor.init(red: 99/255, green: 100/255, blue: 100/255, alpha: 1)
+            backgroundColor = UIColor.init(red: 99/255, green: 100/255, blue: 100/255, alpha: 1)
+            isUserInteractionEnabled = true
             opponentName.text = ""
             opponentPoints.text = ""
             myPoints.text = ""
@@ -35,30 +39,40 @@ class MultiPlayerCellController: UITableViewCell {
             separator.backgroundColor = UIColor.white
             contentView.addSubview(separator)
         } else {
+            isUserInteractionEnabled = false
+            contentView.backgroundColor = UIColor.init(red: 199/255, green: 199/255, blue: 204/255, alpha: 1)
+            backgroundColor = UIColor.init(red: 199/255, green: 199/255, blue: 204/255, alpha: 1)
+            
             cellLabel.text = ""
             
             opponentName.text = viewModel.label
             opponentName.font = textFont
+            opponentName.textColor = UIColor.init(red: 99/255, green: 100/255, blue: 100/255, alpha: 1)
             
-            opponentPoints.text = String(viewModel.opponentPoints!)
-            opponentPoints.font = textFont
+            opponentPoints.text = String((viewModel.opponentPoints != nil) ? viewModel.opponentPoints! : 0)
+            opponentPoints.font = textFont2
             opponentPoints.textColor = UIColor.red
             
-            myPoints.text = String(viewModel.myPoints!)
-            myPoints.font = textFont
+            myPoints.text = String((viewModel.myPoints != nil) ? viewModel.myPoints! : 0)
+            myPoints.font = textFont2
             myPoints.textColor = UIColor.green
             
             pointSeperator.text = "x"
             pointSeperator.font = textFont
+            pointSeperator.textColor = UIColor.init(red: 99/255, green: 100/255, blue: 100/255, alpha: 1)
             
-            separator.removeFromSuperview()
+            if !viewModel.needsSeperator {
+                separator.backgroundColor = UIColor.init(red: 99/255, green: 100/255, blue: 100/255, alpha: 1)
+            } else {
+                separator.backgroundColor = UIColor.white
+            }
         }
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         let separatorHeight = 1 / UIScreen.main.scale
-        separator.frame = CGRect(x: Double(separatorInset.left), y: Double(contentView.bounds.height - separatorHeight), width: Double(contentView.bounds.width - separatorInset.left - separatorInset.right), height: Double(separatorHeight))
+        separator.frame = CGRect(x: Double(separatorInset.left), y: Double(bounds.height - separatorHeight), width: Double(bounds.width - separatorInset.left - separatorInset.right), height: Double(separatorHeight))
     }
     
     override func awakeFromNib() {

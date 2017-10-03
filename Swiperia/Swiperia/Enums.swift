@@ -29,15 +29,12 @@ extension MultipeerServiceType : Equatable {
         switch game.name {
             case "Giant Wars":
                 return .giantWars
-                break
             
             case "Sequence Breaker" :
                 return .sequenceBreaker
-                break
             
             default:
                 return .giantWars
-                break
         }
     }
 }

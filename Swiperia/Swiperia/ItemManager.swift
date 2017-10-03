@@ -291,6 +291,11 @@ class ItemManager {
         return items.filter {$0.key == itemName && $0.value.gameType == gameMode.rawValue}[0].value
     }
     
+    //
+    func getAllItem(ofType type: GameMode) -> [Item] {
+        return items.filter {$0.value.gameType == type.rawValue}.reduce([], {$0 + [$1.value]})
+    }
+    
     ///
     func activateItem (_ itemName: String, on controller: GameViewController, for gameMode: GameMode) {
         let itemTupel = items.filter {$0.key == itemName && $0.value.gameType == gameMode.rawValue}
