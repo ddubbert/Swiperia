@@ -94,7 +94,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2nD-dJ-Rfc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-10004" y="2960"/>
+            <point key="canvasLocation" x="-8839" y="2960"/>
         </scene>
         <!--GiantWars-->
         <scene sceneID="tXr-a1-R10">
@@ -111,7 +111,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-9100" y="3759"/>
+            <point key="canvasLocation" x="-11972" y="3888"/>
         </scene>
         <!--BeatTheMachine-->
         <scene sceneID="ggs-oG-X16">
@@ -140,7 +140,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rQK-St-nDo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-13495" y="2174"/>
+            <point key="canvasLocation" x="-11972" y="2960"/>
         </scene>
         <!--Lobby-->
         <scene sceneID="QoT-pt-luM">
@@ -254,7 +254,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bNY-8L-cMZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-10446" y="3759"/>
+            <point key="canvasLocation" x="-9655" y="3889"/>
         </scene>
         <!--Lobby Creator-->
         <scene sceneID="56v-T6-4vm">
@@ -488,7 +488,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zfQ-0I-cDf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-10862" y="2960"/>
+            <point key="canvasLocation" x="-10447" y="2960"/>
         </scene>
         <!--Data Source-->
         <scene sceneID="6Q7-1e-B87">
@@ -1017,7 +1017,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FSe-5f-1Pl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-7263" y="2960"/>
+            <point key="canvasLocation" x="-6225" y="2174"/>
         </scene>
         <!--Settings-->
         <scene sceneID="QAi-zw-upZ">

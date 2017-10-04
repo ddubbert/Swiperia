@@ -20,10 +20,8 @@ class SinglePlayerCellController: UITableViewCell {
     let separator = UIView(frame: CGRect.zero)
     
     func configure(withSeperator: Bool) {
-        //if withSeperator {
         separator.backgroundColor = UIColor.white
         contentView.addSubview(separator)
-        //}
     }
     
     override func layoutSubviews() {
