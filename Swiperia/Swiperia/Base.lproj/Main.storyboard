@@ -298,7 +298,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s3T-Pi-NNL">
                                         <rect key="frame" x="8" y="69" width="359" height="90"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="unlock" translatesAutoresizingMaskIntoConstraints="NO" id="fVz-Re-mC1">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="GiantWarsBanner" translatesAutoresizingMaskIntoConstraints="NO" id="fVz-Re-mC1">
                                                 <rect key="frame" x="0.0" y="0.0" width="359" height="90"/>
                                                 <color key="backgroundColor" red="1" green="0.64489405996688709" blue="0.42925534734159676" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </imageView>
@@ -1461,6 +1461,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="GiantWarsBanner" width="1200" height="322"/>
         <image name="blizzard" width="512" height="512"/>
         <image name="colorPickerButton" width="800" height="206"/>
         <image name="iconInfoButton" width="800" height="206"/>
@@ -1471,7 +1472,6 @@
         <image name="settingsIcon" width="25" height="25"/>
         <image name="singlePlayerControllerIcon" width="25" height="25"/>
         <image name="soundsOnButton" width="800" height="206"/>
-        <image name="unlock" width="500" height="500"/>
         <image name="userProfileIcon" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
