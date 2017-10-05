@@ -20,6 +20,7 @@ class SettingsController: UIViewController, ChromaColorPickerDelegate {
     var activeColorPicker : String?
     
     var subView : UIView?
+    var neatColorPicker : ChromaColorPicker?
     
     let languages = ["English", "German", "Klingon", "Calamari"]
     var pickedLanguage : String?
@@ -71,6 +72,13 @@ class SettingsController: UIViewController, ChromaColorPickerDelegate {
         if let oldNegColor = ((UIApplication.shared.delegate as! AppDelegate).settings["negColor"] as! UIColor).toRGBA32() {
             negColorPickerButton.setBackgroundImage(processPixels(in: #imageLiteral(resourceName: "colorPickerButton"), to: oldNegColor), for: .normal)
         }
+        
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.removeColorPicker)))
+    }
+    
+    func removeColorPicker() {
+        neatColorPicker?.removeFromSuperview()
+        subView?.removeFromSuperview()
     }
     
     //MARK: - Actions
@@ -156,16 +164,16 @@ class SettingsController: UIViewController, ChromaColorPickerDelegate {
         subView!.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.8)
         
         
-        let neatColorPicker = ChromaColorPicker(frame: CGRect(x: 0, y: 0, width: self.view.frame.width * 0.8, height: self.view.frame.width * 0.8))
-        neatColorPicker.delegate = self //ChromaColorPickerDelegate
-        neatColorPicker.padding = 5
-        neatColorPicker.stroke = 3
-        neatColorPicker.hexLabel.textColor = UIColor.white
+        neatColorPicker = ChromaColorPicker(frame: CGRect(x: 0, y: 0, width: self.view.frame.width * 0.8, height: self.view.frame.width * 0.8))
+        neatColorPicker?.delegate = self //ChromaColorPickerDelegate
+        neatColorPicker?.padding = 5
+        neatColorPicker?.stroke = 3
+        neatColorPicker?.hexLabel.textColor = UIColor.white
         
-        subView!.addSubview(neatColorPicker)
+        subView!.addSubview(neatColorPicker!)
         settingsView.addSubview(subView!)
         subView!.center = settingsView.center
-        neatColorPicker.center = settingsView.center
+        neatColorPicker?.center = settingsView.center
     }
     
     // Show language action sheet

@@ -24,6 +24,10 @@ class BeatTheMachineController : GameViewController {
         activeColor = positiveColor
         
         setupManager()
+        setupScene()
+        setupSphere()
+        setupProgress()
+        itemProgressDidChange(to: 0)
         
         //Setup the timers
         gameTimer.delegate = self
@@ -83,11 +87,6 @@ class BeatTheMachineController : GameViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        setupScene()
-        setupSphere()
-        setupProgress()
-        itemProgressDidChange(to: 0)
-        
         super.viewDidAppear(animated)
         
         startGame()
