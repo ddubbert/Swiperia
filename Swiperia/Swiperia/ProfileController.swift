@@ -14,6 +14,8 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
     
     //MARK: - UserDefaults AppDelegate
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    let clickedColor = UIColor.init(red: 150/255, green: 150/255, blue: 150/255, alpha: 1)
+    let openColor = UIColor.init(red: 202/255, green: 202/255, blue: 202/255, alpha: 1)
     
     @IBOutlet weak var headerLabel: UILabel!
     
@@ -31,6 +33,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
             singlePlayerButton.layer.borderWidth = 0.7
             singlePlayerButton.layer.borderColor = UIColor.black.cgColor
             singlePlayerButton.layer.cornerRadius = 15
+            singlePlayerButton.backgroundColor = clickedColor
         }
     }
     
@@ -40,6 +43,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
             multiPlayerButton.layer.borderWidth = 0.7
             multiPlayerButton.layer.borderColor = UIColor.black.cgColor
             multiPlayerButton.layer.cornerRadius = 15
+            multiPlayerButton.backgroundColor = openColor
         }
     }
     
@@ -206,6 +210,8 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
     @IBAction func singlePlayerButtonTapped(_ sender: UIButton) {
         let labelText = sender.titleLabel?.text
         wantedTableView = labelText!
+        singlePlayerButton.backgroundColor = clickedColor
+        multiPlayerButton.backgroundColor = openColor
         profileTableView.reloadData()
         headerLabel.text = "Singleplayer Scores"
     }
@@ -214,6 +220,8 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINa
     @IBAction func multiPlayerButtonTapped(_ sender: UIButton) {
         let labelText = sender.titleLabel?.text
         wantedTableView = labelText!
+        multiPlayerButton.backgroundColor = clickedColor
+        singlePlayerButton.backgroundColor = openColor
         profileTableView.reloadData()
         headerLabel.text = "Multiplayer Scores"
     }
