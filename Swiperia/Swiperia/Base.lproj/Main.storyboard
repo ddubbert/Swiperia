@@ -703,7 +703,7 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wq2-yE-rCy">
                                                 <rect key="frame" x="0.0" y="395" width="275" height="58"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-BoldItalic" family="Helvetica Neue" pointSize="15"/>
-                                                <state key="normal" title="Items" backgroundImage="lowButtonBlack"/>
+                                                <state key="normal" title="Items" backgroundImage="iconInfoButton"/>
                                                 <connections>
                                                     <segue destination="Tt2-w5-mJt" kind="show" id="1Hs-1n-c0D"/>
                                                 </connections>
@@ -1463,8 +1463,8 @@
     <resources>
         <image name="blizzard" width="512" height="512"/>
         <image name="colorPickerButton" width="800" height="206"/>
+        <image name="iconInfoButton" width="800" height="206"/>
         <image name="languagePickerButton" width="800" height="206"/>
-        <image name="lowButtonBlack" width="1000" height="258"/>
         <image name="multiPlayerControllerIcon" width="25" height="25"/>
         <image name="musicOnButton" width="800" height="206"/>
         <image name="rumbleOnButton" width="800" height="206"/>
