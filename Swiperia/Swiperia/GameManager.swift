@@ -36,15 +36,15 @@ struct GameManager {
             description: "Let your giant fight your opponent. Play with your friend, earn items and hurl them aiganst your enemy to excaerbate his proceed."),
         
         //MARK: SinglePlayerGameMode: beatTheMachine
-        "beatTheMachine" : Game(
-            gameName: "Beat The Machine",
+        "brainChain" : Game(
+            gameName: "Brain Chain",
             imageName: "beatTheMachineImage",
             gameType: .single,
             description: "Fight against the computer, chase the highscore and defy the obstacles of the machine."),
         
         //MARK: SinglePlayerGameMode: beatTheMachine
-        "brainChain" : Game(
-            gameName: "Brain Chain",
+        "beatTheMachine" : Game(
+            gameName: "Beat The Machine",
             imageName: "beatTheMachineImage",
             gameType: .single,
             description: "Fight against the computer, chase the highscore and defy the obstacles of the machine."),
