@@ -239,45 +239,8 @@ class GiantWarsController: GameViewController {
             multiPlayerData["opponents"] = enemyNames
             (UIApplication.shared.delegate as! AppDelegate).multiPlayerData[gameName] = multiPlayerData
             (UIApplication.shared.delegate as! AppDelegate).enemyData = enemyData
-            
-            /*if enemyNames[opponent.peer.displayName + " " + gameName] != nil {
-                var opponentData = gameData[opponent.peer.displayName] as! [String:Any]
-                opponentData["myPoints"] = (opponentData["myPoints"] as! Int) + wonGames
-                opponentData["opponentPoints"] = (opponentData["opponentPoints"] as! Int) + lostGames
-                opponentData["image"] = opponent.image
-                gameData[opponent.peer.displayName] = opponentData.values
-                
-            } else {
-                if gameData.count >= 10 {
-                    var highestOpponent = ""
-                    var highestPoints = 0
-                    for opponentData in gameData {
-                        let opD = opponentData.value as! [String:Any]
-                        let mP = opD["myPoints"] as! Int
-                        let oP = opD["opponentPoints"] as! Int
-                        if (mP + oP) > highestPoints {
-                            highestOpponent = opponentData.key
-                            highestPoints = mP + oP
-                        }
-                    }
-                    gameData.removeValue(forKey: highestOpponent)
-                }
-                var newOpponent = [String:Any]()
-                newOpponent["myPoints"] = wonGames
-                newOpponent["opponentPoints"] = lostGames
-                newOpponent["image"] = opponent.image
-                gameData[opponent.peer.displayName] = newOpponent.values
-                    //(myPoints: wonGames, opponentPoints: lostGames, image: opponent.image)
-            }
-            
-            multiplayerScores["opponents"] = gameData.values
-            
-            (UIApplication.shared.delegate as! AppDelegate).multiPlayerScores[gameName] = multiplayerScores.values
-            print(multiplayerScores)*/
         }
-        
-        print((UIApplication.shared.delegate as! AppDelegate).multiPlayerData[gameName])
-        
+                
         if toLobby == nil {
             if isHost { toLobby = true }
             else { toLobby = false }
