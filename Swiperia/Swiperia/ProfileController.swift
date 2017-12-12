@@ -1,0 +1,422 @@
+//
+//  ProfileController.swift
+//  Swiperia
+//
+//  Created by Edgar Gellert on 28.08.17.
+//  Copyright © 2017 Dedy Gubbert. All rights reserved.
+//
+
+import UIKit
+import AVFoundation
+import Photos
+
+class ProfileController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate{
+    
+    //MARK: - UserDefaults AppDelegate
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    let clickedColor = UIColor.init(red: 150/255, green: 150/255, blue: 150/255, alpha: 1)
+    let openColor = UIColor.init(red: 202/255, green: 202/255, blue: 202/255, alpha: 1)
+    
+    @IBOutlet weak var headerLabel: UILabel!
+    
+    
+    //MARK: - Properties --------------------------------------------------
+    // Properties for profile Images
+    @IBOutlet weak var avatarImageView: UIImageView!
+    @IBOutlet weak var profileView: UIView!
+    @IBOutlet weak var bannerImageView: UIImageView!
+    @IBOutlet weak var userNameTextField: UITextField!
+    
+    @IBOutlet weak var singlePlayerButton: UIButton! {
+        didSet {
+            // Set Basics
+            singlePlayerButton.layer.borderWidth = 0.7
+            singlePlayerButton.layer.borderColor = UIColor.black.cgColor
+            singlePlayerButton.layer.cornerRadius = 15
+            singlePlayerButton.backgroundColor = clickedColor
+        }
+    }
+    
+    @IBOutlet weak var multiPlayerButton: UIButton! {
+        didSet {
+            // Set Basics
+            multiPlayerButton.layer.borderWidth = 0.7
+            multiPlayerButton.layer.borderColor = UIColor.black.cgColor
+            multiPlayerButton.layer.cornerRadius = 15
+            multiPlayerButton.backgroundColor = openColor
+        }
+    }
+    
+    var tapedImageView : UIImageView?
+    var demoData = [String : [String]]()
+    var singlePlayerDemoData = ["first", "second", "third"]
+    var multiPlayerDemoData = ["fourth", "fifth", "sixth"]
+    var wantedTableView : String = "Singleplayer"
+    var currentTypedUserName : String? = ""
+
+    
+    // Properties for profile table view
+    @IBOutlet weak var profileTableView: UITableView! {
+        didSet {
+            profileTableView.clipsToBounds = true
+            profileTableView.layer.borderWidth = 0.7
+            profileTableView.layer.borderColor = UIColor.black.cgColor
+            
+            // Set Seperator
+            profileTableView.separatorStyle = .singleLine
+            profileTableView.separatorColor = UIColor.black
+            
+            // Set Shadow
+            addDropShadow(for: profileTableView)
+        }
+    }
+    
+    //MARK: - System Functions --------------------------------------------------
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        checkUserDefaults(settings: appDelegate.settings)
+        
+        profileTableView.delegate = self
+        profileTableView.dataSource = self
+        
+        wantedTableView = "Singleplayer"
+        demoData["Singleplayer"] = singlePlayerDemoData
+        demoData["Multiplayer"] = multiPlayerDemoData
+        
+        userNameTextField.delegate = self
+        
+        userNameTextField.textColor = .black
+        setTextFieldBorder()
+        
+        
+        headerLabel.text = "Singleplayer Scores"
+        
+        /*prepareCollapseData()
+        displayedRows = collapseData*/
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        //checkForProfileUserDefaults()
+        prepareCollapseData()
+        profileTableView.reloadData()
+    }
+    
+    
+    
+    
+    //MARK: - Functions --------------------------------------------------
+    // Check auf UserDefaults
+    func checkUserDefaults(settings : [String:Any]) {
+        // Check auf UserName
+        if let userName = settings["userName"] as? String {
+            userNameTextField.text = userName
+            setTextFieldBorder()
+        } else {
+            setTextFieldBorder()
+        }
+        
+        // Setzen des Default Banner Image
+        let bannerImage = settings["userBanner"] as! UIImage
+        initiateBanner(banner: bannerImage)
+        
+        // Setzen des Default Avatar Image
+        let avatarImage = settings["userImage"] as! UIImage
+        initiateAvatarImage(avatar: avatarImage)
+    }
+    
+    // Initiate avatar image with a default image
+    func initiateAvatarImage(avatar : UIImage) {
+        if avatar == #imageLiteral(resourceName: "profileUnknown") {
+            avatarImageView.image = ProfileImageMaker.imageMaker.createProfileImage(from: avatar, favoriteColor: appDelegate.settings["posColor"] as! UIColor, radius: avatarImageView.frame.width/2)
+        } else { avatarImageView.image = avatar }
+        addTabGestureForImageView(view: avatarImageView)
+    }
+    
+    // Initiating banner with a default image
+    func initiateBanner(banner : UIImage) {
+        bannerImageView.image = banner
+        addTabGestureForImageView(view: bannerImageView)
+    }
+    
+    //Adding a tab gesture to an ImageView
+    func addTabGestureForImageView(view: UIImageView) {
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.imagePicker)))
+    }
+    
+    // Adding drop shadow for an object like UIButton or UITableView
+    func addDropShadow(for object : UIView) {
+        object.layer.shadowColor = UIColor.black.cgColor
+        object.layer.shadowOpacity = 1
+        object.layer.shadowOffset = CGSize.zero
+        object.layer.shadowRadius = 10
+        object.layer.shadowPath = UIBezierPath(rect: object.bounds).cgPath
+        
+    }
+    
+    // Hide Keyboard when user touches outside the keyboard
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        userNameTextField.resignFirstResponder()
+    }
+    
+    // User pressed "done" on keyboard
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        userNameTextField.text = textField.text
+        userNameTextField.resignFirstResponder()
+        setTextFieldBorder()
+        checkUserNameInput()
+        return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        currentTypedUserName = textField.text
+    }
+    
+    func checkUserNameInput() {
+        if (userNameTextField.text?.isEmpty)! {
+            userNameTextField.text = currentTypedUserName
+            setTextFieldBorder()
+        }
+    }
+    
+    // Set the user text field border if a user name is set
+    func setTextFieldBorder() {
+        if userNameTextField.text != nil {
+            if userNameTextField.text!.isEmpty {
+                userNameTextField.borderStyle = .roundedRect
+                userNameTextField.placeholder = "Type in your name!"
+                userNameTextField.textColor = .black
+                userNameTextField.backgroundColor = .white
+            } else {
+                userNameTextField.borderStyle = .none
+                userNameTextField.textColor = .white
+                userNameTextField.backgroundColor = .clear
+            }
+            
+        } else {
+            userNameTextField.borderStyle = .roundedRect
+            userNameTextField.placeholder = "Type in your name!"
+            userNameTextField.textColor = .black
+            userNameTextField.backgroundColor = .white
+        }
+    }
+    
+    // MARK: - Action-Functions --------------------------------------------------
+    @IBAction func singlePlayerButtonTapped(_ sender: UIButton) {
+        let labelText = sender.titleLabel?.text
+        wantedTableView = labelText!
+        singlePlayerButton.backgroundColor = clickedColor
+        multiPlayerButton.backgroundColor = openColor
+        profileTableView.reloadData()
+        headerLabel.text = "Singleplayer Scores"
+    }
+    
+    
+    @IBAction func multiPlayerButtonTapped(_ sender: UIButton) {
+        let labelText = sender.titleLabel?.text
+        wantedTableView = labelText!
+        multiPlayerButton.backgroundColor = clickedColor
+        singlePlayerButton.backgroundColor = openColor
+        profileTableView.reloadData()
+        headerLabel.text = "Multiplayer Scores"
+    }
+    
+    
+    @IBAction func userNameTextfieldPressed(_ sender: UITextField) {
+        userNameTextField.text = sender.text
+        appDelegate.settings["userName"] = sender.text
+        sender.resignFirstResponder()
+    }
+    
+    
+    
+    //MARK: - ImagePicker-Functions --------------------------------------------------
+    
+    func imagePicker(sender: UITapGestureRecognizer) {
+        tapedImageView = sender.view as? UIImageView
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        
+        // Camera-Alert
+        let cameraAlert = UIAlertController(title: "Sorry, no permission.", message: "Give permission to camera in your iPhone settings.", preferredStyle: .alert)
+        cameraAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        cameraAlert.addAction(UIAlertAction(title: "Settings", style: .default, handler: { action in UIApplication.shared.open(URL(string:UIApplicationOpenSettingsURLString)!) } ))
+        
+        // PhotoLibrary-Alert
+        let photoAlert = UIAlertController(title: "Sorry, no permission.", message: "Give permission to photo library in your iPhone settings", preferredStyle: .alert)
+        photoAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        photoAlert.addAction(UIAlertAction(title: "Settings", style: .default, handler: { action in UIApplication.shared.open(URL(string:UIApplicationOpenSettingsURLString)!) } ))
+        
+        // Action-Sheet-Object
+        let actionSheet = UIAlertController(title: "Photo Source", message: "Choose a source", preferredStyle: .actionSheet)
+        
+        // Action-Sheet-Camera
+        actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { (action:UIAlertAction) in
+            
+            if AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) == AVAuthorizationStatus.authorized {
+                // Already Authorized
+                imagePickerController.sourceType = .camera
+                self.present(imagePickerController, animated: true, completion: nil)
+            } else {
+                AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo, completionHandler: { (granted :Bool) -> Void in
+                    if granted == true {
+                        // User Granted
+                        imagePickerController.sourceType = .camera
+                        self.present(imagePickerController, animated: true, completion: nil)
+                    } else {
+                        // User Rejected
+                        self.present(cameraAlert, animated: true, completion: nil)
+                    }
+                })
+            }
+        }))
+        
+        // Action-Sheet-PhotoLibrary
+        actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { (action:UIAlertAction) in
+            
+            if AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) == AVAuthorizationStatus.authorized {
+                // Already Authorized
+                imagePickerController.sourceType = .photoLibrary
+                self.present(imagePickerController, animated: true, completion: nil)
+            } else {
+                AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo, completionHandler: { (granted :Bool) -> Void in
+                    if granted == true {
+                        // User Granted
+                        imagePickerController.sourceType = .photoLibrary
+                        self.present(imagePickerController, animated: true, completion: nil)
+                    } else {
+                        // User Rejected
+                        self.present(photoAlert, animated: true, completion: nil)
+                    }
+                })
+            }
+        }))
+        
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(actionSheet, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+        if tapedImageView == bannerImageView {
+            tapedImageView?.image = image
+            
+            appDelegate.settings["userBanner"] = image
+        } else if tapedImageView == avatarImageView {
+            let newImage = ProfileImageMaker.imageMaker.createProfileImage(from: image, favoriteColor: appDelegate.settings["posColor"] as! UIColor, radius: avatarImageView.frame.width/2)
+            tapedImageView?.image = newImage
+            
+            appDelegate.settings["userImage"] = newImage
+        }
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    
+    // MARK: - Table View Functions --------------------------------------------------
+    
+    var collapseData : [CollapseableViewModel] = []
+    
+    func prepareCollapseData() {
+        collapseData = []
+        let multiplayerGames = appDelegate.multiPlayerData
+        let enemies = appDelegate.enemyData
+        
+        for game in multiplayerGames {
+            var children : [CollapseableViewModel] = []
+            let opponentNames = (game.value as! [String:Any])["opponents"] as! [String]
+            
+            for name in opponentNames {
+                let opponentData = enemies[name] as! [String:Any]
+                
+                children.append(CollapseableViewModel(label: opponentData["name"] as! String, image: opponentData["image"] as? UIImage, children: [], isCollapsed: false, opponentPoints: opponentData["opponentPoints"] as? Int, myPoints: opponentData["myPoints"] as? Int))
+            }
+            
+            let model = CollapseableViewModel(label: game.key, image: UIImage.init(named: (game.value as! [String:Any])["image"] as! String), children: children)
+            collapseData.append(model)
+        }
+        
+        displayedRows = collapseData
+    }
+    
+    var displayedRows : [CollapseableViewModel] = []
+    
+    
+    // MARK: Table view data source
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if wantedTableView == "Singleplayer" {
+            return appDelegate.singlePlayerScores.count
+        } else {
+            return displayedRows.count
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+    {
+        return 60
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        tableView.separatorStyle = .none
+        let fontColor = UIColor.white
+        
+        if wantedTableView == "Singleplayer" {
+            let cell = profileTableView.dequeueReusableCell(withIdentifier: "SinglePlayerCell", for: indexPath) as! SinglePlayerCellController
+            let attributes : [String: Any] = [
+                NSFontAttributeName : UIFont(name: "HelveticaNeue-bold", size: 20)!,
+                NSForegroundColorAttributeName : fontColor,
+                NSUnderlineStyleAttributeName : NSUnderlineStyle.styleSingle.rawValue]
+            let attributeName = NSMutableAttributedString(string: Array(appDelegate.singlePlayerScores.keys)[indexPath.row], attributes: attributes)
+            cell.gameNameLabel.attributedText = attributeName
+            cell.gameScoreLabel.text = String(format: "%.0f",(appDelegate.singlePlayerScores[Array(appDelegate.singlePlayerScores.keys)[indexPath.row]] as! [String : Any])["score"] as! Double)
+            cell.gameScoreLabel.font = UIFont(name: "HelveticaNeue", size: 20)
+            cell.gameScoreLabel.textColor = fontColor
+            cell.gameImageView.image = UIImage.init(named: (appDelegate.singlePlayerScores[Array(appDelegate.singlePlayerScores.keys)[indexPath.row]] as! [String : Any])["image"] as! String)
+            
+            if indexPath.row == appDelegate.singlePlayerScores.count - 1 {cell.configure(withSeperator: false)}
+            else {cell.configure(withSeperator: true)}
+            return cell
+        } else {
+            let cell = profileTableView.dequeueReusableCell(withIdentifier: "MultiPlayerCell", for: indexPath) as! MultiPlayerCellController
+            cell.configure(viewModel: displayedRows[indexPath.row])
+            return cell
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+        let viewModel = displayedRows[indexPath.row]
+        
+        if viewModel.children.count > 0 {
+            let range = indexPath.row+1...indexPath.row+viewModel.children.count
+            let indexPaths = range.map{return NSIndexPath(row: $0, section: indexPath.section)}
+            tableView.beginUpdates()
+            
+            if viewModel.isCollapsed {
+                displayedRows.insert(contentsOf: viewModel.children, at: indexPath.row+1)
+                tableView.insertRows(at: indexPaths as [IndexPath], with: .automatic)
+            } else {
+                displayedRows.removeSubrange(range)
+                tableView.deleteRows(at: indexPaths as [IndexPath], with: .automatic)
+            }
+            tableView.endUpdates()
+        }
+        viewModel.isCollapsed = !viewModel.isCollapsed
+    }
+    
+    
+}
