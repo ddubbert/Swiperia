@@ -8,10 +8,19 @@ generate and fire items at your opponent: an earthquake shakes the arrows, a
 blizzard blocks the view, the screen turns upside down, the swipe direction is
 reversed, or the time per swipe is halved.
 
-<p>
-  <img src="docs/game.png" alt="Game view" width="260">
-  <img src="docs/items.png" alt="List of multiplayer items" width="260">
+<p align="center">
+  <img src="docs/multiplayer.gif" alt="Two phones playing Giant Wars against each other" width="560">
 </p>
+
+## Screenshots
+
+| Game | Combo | Mistake | Item ready |
+|:-:|:-:|:-:|:-:|
+| <img src="docs/game.png" alt="Game view" width="180"> | <img src="docs/screens/game-combo.png" alt="High combo" width="180"> | <img src="docs/screens/game-mistake.png" alt="Wrong swipe" width="180"> | <img src="docs/screens/game-item.png" alt="Item ready to fire" width="180"> |
+
+| Game selection | Game browser | Create lobby | Settings | Item list |
+|:-:|:-:|:-:|:-:|:-:|
+| <img src="docs/screens/game-selection.png" alt="Single player game carousel" width="180"> | <img src="docs/screens/game-browser.png" alt="Searching for Giant Wars lobbies" width="180"> | <img src="docs/screens/create-lobby.png" alt="Lobby creator" width="180"> | <img src="docs/screens/settings.png" alt="Settings" width="180"> | <img src="docs/screens/item-list.png" alt="List of items" width="180"> |
 
 ## How to play
 
