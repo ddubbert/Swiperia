@@ -18,9 +18,13 @@ reversed, or the time per swipe is halved.
 |:-:|:-:|:-:|:-:|
 | <img src="docs/game.png" alt="Game view" width="180"> | <img src="docs/screens/game-combo.png" alt="High combo" width="180"> | <img src="docs/screens/game-mistake.png" alt="Wrong swipe" width="180"> | <img src="docs/screens/game-item.png" alt="Item ready to fire" width="180"> |
 
-| Game selection | Game browser | Create lobby | Settings | Item list |
-|:-:|:-:|:-:|:-:|:-:|
-| <img src="docs/screens/game-selection.png" alt="Single player game carousel" width="180"> | <img src="docs/screens/game-browser.png" alt="Searching for Giant Wars lobbies" width="180"> | <img src="docs/screens/create-lobby.png" alt="Lobby creator" width="180"> | <img src="docs/screens/settings.png" alt="Settings" width="180"> | <img src="docs/screens/item-list.png" alt="List of items" width="180"> |
+| Game selection | Game browser | Create lobby | Lobby |
+|:-:|:-:|:-:|:-:|
+| <img src="docs/screens/game-selection.png" alt="Single player game carousel" width="180"> | <img src="docs/screens/game-browser.png" alt="Searching for Giant Wars lobbies" width="180"> | <img src="docs/screens/create-lobby.png" alt="Lobby creator" width="180"> | <img src="docs/screens/lobby.png" alt="Lobby with players" width="180"> |
+
+| Profile | Settings | Item list |
+|:-:|:-:|:-:|
+| <img src="docs/screens/profile.png" alt="Profile with scores per opponent" width="180"> | <img src="docs/screens/settings.png" alt="Settings" width="180"> | <img src="docs/screens/item-list.png" alt="List of items" width="180"> |
 
 ## How to play
 
