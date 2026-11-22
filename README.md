@@ -34,15 +34,15 @@ An orb shows an arrow. Swipe in its direction, then the next arrow appears.
 
 ## Items
 
-| Item | Mode | Effect (10 seconds) |
-|---|---|---|
-| Same direction | Single player | The swipe direction is frozen, you only need to swipe one way |
-| Freeze time | Single player | The time bar stops (wrong swipes still cost time) |
-| Reverse direction | Multiplayer | The opponent has to swipe against the arrow |
-| Half arrow time | Multiplayer | The opponent has less time per swipe |
-| Earthquake | Multiplayer | The opponent's arrows shake and the time bar disappears |
-| Blizzard | Multiplayer | Snow covers the opponent's screen |
-| Turn around | Multiplayer | The opponent's game is turned upside down |
+| | Item | Mode | Effect (10 seconds) |
+|---|---|---|---|
+| <img src="docs/items/sameDirection.png" alt="" width="40"> | Same direction | Single player | The swipe direction is frozen, you only need to swipe one way |
+| <img src="docs/items/freezeTime.png" alt="" width="40"> | Freeze time | Single player | The time bar stops (wrong swipes still cost time) |
+| <img src="docs/items/reverseDirection.png" alt="" width="40"> | Reverse direction | Multiplayer | The opponent has to swipe against the arrow |
+| <img src="docs/items/halfArrowTime.png" alt="" width="40"> | Half arrow time | Multiplayer | The opponent has less time per swipe |
+| <img src="docs/items/earthquake.png" alt="" width="40"> | Earthquake | Multiplayer | The opponent's arrows shake and the time bar disappears |
+| <img src="docs/items/blizzard.png" alt="" width="40"> | Blizzard | Multiplayer | Snow covers the opponent's screen |
+| <img src="docs/items/turnAround.png" alt="" width="40"> | Turn around | Multiplayer | The opponent's game is turned upside down |
 
 ## Context
 
@@ -64,6 +64,53 @@ repository. That history (May to October 2017) is preserved in this repo.
 - Profile with generated avatar (colour picker) and saved single and
   multiplayer results
 - Settings for music, sounds, vibration and the colours of the swipe feedback
+
+## Architecture
+
+A single Xcode project (UIKit, storyboards), roughly split into views,
+controllers and models/managers:
+
+```mermaid
+flowchart TB
+  subgraph Navigation
+    Tab[CustomTabBarController] --> SP[Single player<br>GameSelectionController + iCarousel]
+    Tab --> MP[Multiplayer<br>GameSelectionController + iCarousel]
+    Tab --> Prof[ProfileController]
+    Tab --> Set[SettingsController<br>ChromaColorPicker] --> ItemsV[ItemViewController]
+  end
+  subgraph Game
+    GVC[GameViewController] --> BTM[BeatTheMachineController]
+    GVC --> GW[GiantWarsController]
+    GVC --> Scene[GameScene · SceneKit<br>SphereNode, particles]
+    GVC --> Overlay[OverlayScene · SpriteKit<br>ItemPanel, progress, health bar]
+    GVC --> Mgr[DirectionManager · TimeManager<br>GameScoreManager · ItemManager · MusicPlayer]
+  end
+  subgraph Multiplayer
+    Browser[MultipeerBrowserViewController] --> Lobby[MultipeerLobbyViewController]
+    Create[CreateLobbyViewController] --> Lobby
+    Lobby --> MPC[MPCManager<br>MCSession, advertiser, browser]
+    MPC --> Msg[MessageManager<br>items, time, start/pause/lost]
+  end
+  SP --> BTM
+  MP --> Browser
+  MP --> Create
+  Lobby --> GW
+  GW <--> Msg
+  Prof --> Store[(UserDefaults<br>profile, results, settings)]
+  BTM --> Store
+  GW --> Store
+```
+
+- **Game loop:** `GameViewController` holds the shared logic (swipe handling,
+  timers, combo and item charge); the two game modes subclass it. The orb is a
+  SceneKit scene, the HUD (item panel, progress, opponent health bar) a
+  SpriteKit overlay on top.
+- **Multiplayer:** each game mode advertises its own Multipeer service type;
+  lobbies can require a password. `MessageManager` encodes typed messages
+  (item fired, time changed, start, pause, resume, lost, kicked, avatar image)
+  and forwards them to the running game via a delegate.
+- **Persistence:** a `UserDefaults` extension stores the profile (generated
+  avatar via `ProfileImageMaker`), single and multiplayer results and settings.
 
 ## Tech
 
