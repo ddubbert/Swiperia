@@ -26,16 +26,17 @@ repository. That history (May to October 2017) is preserved in this repo.
 ## Features
 
 - Single player: *Beat the Machine*, swipe against the clock
-- Multiplayer: *Giant Wars* and *Sequence Breaker* over Multipeer Connectivity,
-  with lobbies, password protection and pause/resume
+- Multiplayer: *Giant Wars* over Multipeer Connectivity, with lobbies,
+  password protection and pause/resume (a second mode, *Sequence Breaker*,
+  was planned but not finished)
 - Item system with six items, each with its own visual effect
 - Profile with generated avatar (colour picker) and saved single and
   multiplayer results
-- Settings for music, sound and controls
+- Settings for music, sounds, vibration and the colours of the swipe feedback
 
 ## Tech
 
-Swift 3/4, UIKit with storyboards, SpriteKit and SceneKit particle effects,
+Swift 3, UIKit with storyboards, SpriteKit and SceneKit particle effects,
 Multipeer Connectivity, UserDefaults for persistence. Dependencies:
 [iCarousel](https://github.com/nicklockwood/iCarousel) (vendored) and
 [ChromaColorPicker](https://github.com/joncardasis/ChromaColorPicker) (CocoaPods).
